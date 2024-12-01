@@ -23,22 +23,38 @@ class ProfileController extends BaseController
                     return $this->response->setStatusCode(400)->setJSON($response);
                 }
             }
+            
             $data = $model->whereIn('name', $names)->findAll();
-        }
-        $data = $model->findAll();
 
-        if (count($data) > 0) {
-            return $this->response->setStatusCode(201)->setJSON([
-                'status' => 1,
-                'message' => 'tampil data berhasil',
-                'data' => $data
-            ]);
+            if (count($data) > 0) {
+                return $this->response->setStatusCode(201)->setJSON([
+                    'status' => 1,
+                    'message' => 'tampil data berhasil',
+                    'data' => $data
+                ]);
+            } else {
+                $response = [
+                    'status' => 0,
+                    'message' => 'nama tidak ditemukan',
+                ];
+                return $this->response->setStatusCode(400)->setJSON($response);
+            }
         } else {
-            $response = [
-                'status' => 0,
-                'message' => 'nama tidak ditemukan',
-            ];
-            return $this->response->setStatusCode(400)->setJSON($response);
+            $data = $model->findAll();
+    
+            if (count($data) > 0) {
+                return $this->response->setStatusCode(201)->setJSON([
+                    'status' => 1,
+                    'message' => 'tampil data berhasil',
+                    'data' => $data
+                ]);
+            } else {
+                $response = [
+                    'status' => 0,
+                    'message' => 'nama tidak ditemukan',
+                ];
+                return $this->response->setStatusCode(400)->setJSON($response);
+            }
         }
     }
 
