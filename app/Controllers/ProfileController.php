@@ -127,8 +127,16 @@ class ProfileController extends BaseController
         try {
             $this->request = request();
             $model = new ProfileModel();
-            $id =  $this->request->getVar('name');
-            $model->where('name', $id)->delete();
+            $name =  $this->request->getVar('name');
+            $check = $model->where('name', $name)->first();
+            if (empty($check)) {
+                $response = [
+                    'status' => 0,
+                    'message' => 'nama tidak ditemukan',
+                ];
+                return $this->response->setStatusCode(400)->setJSON($response);
+            }
+            $model->where('name', $name)->delete();
 
             return $this->response->setStatusCode(200)->setJSON([
                 'status' => 1,
