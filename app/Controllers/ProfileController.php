@@ -108,8 +108,8 @@ class ProfileController extends BaseController
         try {
             $this->request = request();
             $model = new ProfileModel();
-            $id =  $this->request->getVar('id');
-            $model->delete($id);
+            $id =  $this->request->getVar('name');
+            $model->where('name', $id)->delete();
 
             return $this->response->setStatusCode(200)->setJSON([
                 'status' => 1,
