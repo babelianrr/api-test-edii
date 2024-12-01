@@ -12,17 +12,20 @@ class ProfileController extends BaseController
     {
         $model = new ProfileModel();
         $names = explode(",", $this->request->getVar('name'));
-        foreach ($names as $name) {
-            $check = $model->where('name', $name)->first();
-            if (empty($check)) {
-                $response = [
-                    'status' => 0,
-                    'message' => 'nama tidak ditemukan',
-                ];
-                return $this->response->setStatusCode(400)->setJSON($response);
+        if ($this->request->getVar('name') !== "") {
+            foreach ($names as $name) {
+                $check = $model->where('name', $name)->first();
+                if (empty($check)) {
+                    $response = [
+                        'status' => 0,
+                        'message' => 'nama tidak ditemukan',
+                    ];
+                    return $this->response->setStatusCode(400)->setJSON($response);
+                }
             }
+            $data = $model->whereIn('name', $names)->findAll();
         }
-        $data = $model->whereIn('name', $names)->findAll();
+        $data = $model->findAll();
 
         if (count($data) > 0) {
             return $this->response->setStatusCode(201)->setJSON([
